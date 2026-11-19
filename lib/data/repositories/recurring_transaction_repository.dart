@@ -48,4 +48,16 @@ class RecurringTransactionRepository {
   Future<int> deleteRecurringTransaction(String id) {
     return _recurringTransactionDao.deleteRecurringTransaction(id);
   }
+
+  Future<int> updateRecurringSchedule({
+    required String id,
+    required DateTime nextDueDate,
+    required DateTime lastGeneratedDate,
+  }) {
+    return _recurringTransactionDao.updateRecurringSchedule(
+      id: id,
+      nextDueDate: nextDueDate,
+      lastGeneratedDate: lastGeneratedDate,
+    );
+  }
 }

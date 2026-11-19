@@ -66,6 +66,7 @@ Future<void> main() async {
         ChangeNotifierProvider(
           create: (_) => RecurringTransactionProvider(
             recurringTransactionRepository,
+            transactionRepository,
           ),
         ),
         ChangeNotifierProvider(

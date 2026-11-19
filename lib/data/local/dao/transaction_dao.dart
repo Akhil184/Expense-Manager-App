@@ -91,4 +91,12 @@ class TransactionDao extends DatabaseAccessor<AppDatabase>
       ..limit(limit, offset: offset))
         .get();
   }
+  Future<int> insertRecurringTransaction(
+      TransactionsCompanion transaction,
+      ) {
+    return into(transactions).insert(
+      transaction,
+      mode: InsertMode.insertOrIgnore,
+    );
+  }
 }

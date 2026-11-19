@@ -29,6 +29,12 @@ class TransactionRepository {
     return _transactionDao.getTransactionById(id);
   }
 
+  Future<int> addRecurringTransaction(
+      TransactionsCompanion transaction,
+      ) {
+    return _transactionDao.insertRecurringTransaction(transaction);
+  }
+
   // Update a transaction
   Future<int> updateTransaction(TransactionsCompanion transaction) {
     return _transactionDao.updateTransaction(transaction);

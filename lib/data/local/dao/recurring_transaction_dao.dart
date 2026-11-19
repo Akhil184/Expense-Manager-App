@@ -62,4 +62,20 @@ class RecurringTransactionDao extends DatabaseAccessor<AppDatabase>
       recurringTransactions,
     )..where((table) => table.id.equals(id))).go();
   }
+
+  Future<int> updateRecurringSchedule({
+    required String id,
+    required DateTime nextDueDate,
+    required DateTime lastGeneratedDate,
+  }) {
+    return (update(recurringTransactions)
+      ..where((table) => table.id.equals(id)))
+        .write(
+      RecurringTransactionsCompanion(
+        nextDueDate: Value(nextDueDate),
+        lastGeneratedDate: Value(lastGeneratedDate),
+        updatedAt: Value(DateTime.now()),
+      ),
+    );
+  }
 }
