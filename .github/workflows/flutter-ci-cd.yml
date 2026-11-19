@@ -31,7 +31,7 @@ jobs:
           flutter-version: '3.44.1'
 
       - name: Get Dependencies
-        run: flutter pub get -v
+        run: flutter pub get
 
       - name: Analyze Code
         run: flutter analyze
