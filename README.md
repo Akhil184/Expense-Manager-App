@@ -1,3 +1,15 @@
+<img width="630" height="1400" alt="WhatsApp Image 2026-11-19 at 6 45 15 PM" src="https://github.com/user-attachments/assets/a3f53c48-0ec6-403d-9f91-e3e61ddbc241" />
+
+<img width="630" height="1400" alt="WhatsApp Image 2026-11-19 at 6 45 15 PM (1)" src="https://github.com/user-attachments/assets/c9183034-3bf5-41e0-a4b1-a67ffc112a2d" />
+
+<img width="630" height="1400" alt="WhatsApp Image 2026-11-19 at 6 45 15 PM (2)" src="https://github.com/user-attachments/assets/4fdbd09c-3f2e-466e-999b-c847d21580ee" />
+
+<img width="630" height="1400" alt="WhatsApp Image 2026-11-19 at 6 45 15 PM (3)" src="https://github.com/user-attachments/assets/362e3322-0fa6-4423-bedb-4dfc8d70c53a" />
+
+
+
+
+
 Expense Manager App
 
 A Flutter-based Expense Manager application that helps users track income and expenses, manage budgets, organize transactions, and monitor their financial activities.
