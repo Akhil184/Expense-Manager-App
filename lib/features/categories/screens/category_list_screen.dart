@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -9,10 +8,10 @@ class CategoryListScreen extends StatelessWidget {
   const CategoryListScreen({super.key});
 
   Future<void> _deleteCategory(
-      BuildContext context,
-      String id,
-      String name,
-      ) async {
+    BuildContext context,
+    String id,
+    String name,
+  ) async {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (dialogContext) => AlertDialog(
@@ -39,16 +38,12 @@ class CategoryListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Categories'),
-      ),
+      appBar: AppBar(title: const Text('Categories')),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(
-              builder: (_) => const AddCategoryScreen(),
-            ),
+            MaterialPageRoute(builder: (_) => const AddCategoryScreen()),
           );
         },
         child: const Icon(Icons.add),
@@ -56,21 +51,15 @@ class CategoryListScreen extends StatelessWidget {
       body: Consumer<CategoryProvider>(
         builder: (context, provider, child) {
           if (provider.isLoading) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
+            return const Center(child: CircularProgressIndicator());
           }
 
           if (provider.error != null) {
-            return Center(
-              child: Text(provider.error!),
-            );
+            return Center(child: Text(provider.error!));
           }
 
           if (provider.categories.isEmpty) {
-            return const Center(
-              child: Text('No categories added yet'),
-            );
+            return const Center(child: Text('No categories added yet'));
           }
 
           return ListView.builder(
@@ -89,15 +78,9 @@ class CategoryListScreen extends StatelessWidget {
                 title: Text(category.name),
                 subtitle: Text(category.type.toUpperCase()),
                 trailing: IconButton(
-                  icon: const Icon(
-                    Icons.delete_outline,
-                    color: Colors.red,
-                  ),
-                  onPressed: () => _deleteCategory(
-                    context,
-                    category.id,
-                    category.name,
-                  ),
+                  icon: const Icon(Icons.delete_outline, color: Colors.red),
+                  onPressed: () =>
+                      _deleteCategory(context, category.id, category.name),
                 ),
               );
             },

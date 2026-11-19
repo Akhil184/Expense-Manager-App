@@ -23,19 +23,14 @@ class LightTheme {
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: colorScheme.surface,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide(color: colorScheme.outlineVariant),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(
-            color: colorScheme.primary,
-            width: 2,
-          ),
+          borderSide: BorderSide(color: colorScheme.primary, width: 2),
         ),
       ),
 
@@ -49,9 +44,7 @@ class LightTheme {
       ),
 
       cardColor: Colors.white,
-      dividerTheme: DividerThemeData(
-        color: colorScheme.outlineVariant,
-      ),
+      dividerTheme: DividerThemeData(color: colorScheme.outlineVariant),
     );
   }
 }

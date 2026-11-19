@@ -78,7 +78,7 @@ class RecurringTransactions extends Table {
 // Database
 @DriftDatabase(
   tables: [Transactions, Budgets, Categories, RecurringTransactions],
-  daos: [TransactionDao, BudgetDao, CategoryDao,RecurringTransactionDao,],
+  daos: [TransactionDao, BudgetDao, CategoryDao, RecurringTransactionDao],
 )
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(DatabaseHelper.openConnection());

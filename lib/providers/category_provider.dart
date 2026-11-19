@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:drift/drift.dart';
 
@@ -35,10 +34,7 @@ class CategoryProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> addCategory({
-    required String name,
-    required String type,
-  }) async {
+  Future<void> addCategory({required String name, required String type}) async {
     final category = CategoriesCompanion.insert(
       id: DateTime.now().microsecondsSinceEpoch.toString(),
       name: name.trim(),

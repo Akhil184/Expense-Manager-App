@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../data/local/database/app_database.dart';
 import '../../../providers/recurring_transaction_provider.dart';
 import '../../../providers/category_provider.dart';
 
 class AddRecurringTransactionScreen extends StatefulWidget {
-  const AddRecurringTransactionScreen({super.key});
+  final RecurringTransaction? transaction;
+
+  const AddRecurringTransactionScreen({super.key, this.transaction});
 
   @override
   State<AddRecurringTransactionScreen> createState() =>
@@ -25,6 +28,28 @@ class _AddRecurringTransactionScreenState
   String _category = 'Food';
 
   DateTime _nextDueDate = DateTime.now();
+
+  bool _isSaving = false;
+
+  bool get _isEditing => widget.transaction != null;
+
+  @override
+  void initState() {
+    super.initState();
+
+    final transaction = widget.transaction;
+
+    if (transaction != null) {
+      _titleController.text = transaction.title;
+      _amountController.text = transaction.amount.toString();
+      _noteController.text = transaction.note ?? '';
+
+      _type = transaction.type;
+      _frequency = transaction.frequency;
+      _category = transaction.category;
+      _nextDueDate = transaction.nextDueDate;
+    }
+  }
 
   List<String> _getDefaultCategories() {
     if (_type == 'income') {
@@ -72,24 +97,45 @@ class _AddRecurringTransactionScreenState
 
     if (amount == null || amount <= 0) return;
 
+    setState(() {
+      _isSaving = true;
+    });
+
     try {
-      await context
-          .read<RecurringTransactionProvider>()
-          .addRecurringTransaction(
-            title: _titleController.text.trim(),
-            amount: amount,
-            type: _type,
-            category: _category,
-            note: _noteController.text,
-            frequency: _frequency,
-            nextDueDate: _nextDueDate,
-          );
+      final provider = context.read<RecurringTransactionProvider>();
+
+      if (_isEditing) {
+        await provider.updateRecurringTransaction(
+          id: widget.transaction!.id,
+          title: _titleController.text.trim(),
+          amount: amount,
+          type: _type,
+          category: _category,
+          note: _noteController.text,
+          frequency: _frequency,
+          nextDueDate: _nextDueDate,
+        );
+      } else {
+        await provider.addRecurringTransaction(
+          title: _titleController.text.trim(),
+          amount: amount,
+          type: _type,
+          category: _category,
+          note: _noteController.text,
+          frequency: _frequency,
+          nextDueDate: _nextDueDate,
+        );
+      }
 
       if (!mounted) return;
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Recurring transaction added successfully'),
+        SnackBar(
+          content: Text(
+            _isEditing
+                ? 'Recurring transaction updated successfully'
+                : 'Recurring transaction added successfully',
+          ),
         ),
       );
 
@@ -100,6 +146,12 @@ class _AddRecurringTransactionScreenState
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text('Failed to save: $e')));
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isSaving = false;
+        });
+      }
     }
   }
 
@@ -122,7 +174,13 @@ class _AddRecurringTransactionScreenState
         : categoryOptions.first;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Add Recurring Transaction')),
+      appBar: AppBar(
+        title: Text(
+          _isEditing
+              ? 'Edit Recurring Transaction'
+              : 'Add Recurring Transaction',
+        ),
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Form(
@@ -143,6 +201,7 @@ class _AddRecurringTransactionScreenState
                   return null;
                 },
               ),
+
               const SizedBox(height: 16),
 
               TextFormField(
@@ -157,12 +216,15 @@ class _AddRecurringTransactionScreenState
                 ),
                 validator: (value) {
                   final amount = double.tryParse(value ?? '');
+
                   if (amount == null || amount <= 0) {
                     return 'Enter a valid amount';
                   }
+
                   return null;
                 },
               ),
+
               const SizedBox(height: 16),
 
               DropdownButtonFormField<String>(
@@ -184,6 +246,7 @@ class _AddRecurringTransactionScreenState
                   }
                 },
               ),
+
               const SizedBox(height: 16),
 
               DropdownButtonFormField<String>(
@@ -206,6 +269,7 @@ class _AddRecurringTransactionScreenState
                   }
                 },
               ),
+
               const SizedBox(height: 16),
 
               DropdownButtonFormField<String>(
@@ -228,6 +292,7 @@ class _AddRecurringTransactionScreenState
                   }
                 },
               ),
+
               const SizedBox(height: 16),
 
               OutlinedButton.icon(
@@ -238,6 +303,7 @@ class _AddRecurringTransactionScreenState
                   '${_nextDueDate.day}/${_nextDueDate.month}/${_nextDueDate.year}',
                 ),
               ),
+
               const SizedBox(height: 16),
 
               TextFormField(
@@ -248,13 +314,20 @@ class _AddRecurringTransactionScreenState
                   border: OutlineInputBorder(),
                 ),
               ),
+
               const SizedBox(height: 24),
 
               SizedBox(
                 height: 50,
                 child: ElevatedButton(
-                  onPressed: _saveRecurringTransaction,
-                  child: const Text('Save Recurring Transaction'),
+                  onPressed: _isSaving ? null : _saveRecurringTransaction,
+                  child: _isSaving
+                      ? const CircularProgressIndicator()
+                      : Text(
+                          _isEditing
+                              ? 'Update Recurring Transaction'
+                              : 'Save Recurring Transaction',
+                        ),
                 ),
               ),
             ],

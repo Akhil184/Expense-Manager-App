@@ -1,4 +1,3 @@
-
 import '../local/database/app_database.dart';
 import '../local/dao/category_dao.dart';
 

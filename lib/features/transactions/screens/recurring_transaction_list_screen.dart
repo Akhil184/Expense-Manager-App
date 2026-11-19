@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -12,10 +11,7 @@ class RecurringTransactionListScreen extends StatelessWidget {
     return '${date.day}/${date.month}/${date.year}';
   }
 
-  Future<void> confirmDelete(
-      BuildContext context,
-      String id,
-      ) async {
+  Future<void> confirmDelete(BuildContext context, String id) async {
     final confirm = await showDialog<bool>(
       context: context,
       builder: (dialogContext) => AlertDialog(
@@ -46,21 +42,15 @@ class RecurringTransactionListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Recurring Transactions'),
-      ),
+      appBar: AppBar(title: const Text('Recurring Transactions')),
       body: Consumer<RecurringTransactionProvider>(
         builder: (context, provider, child) {
           if (provider.isLoading) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
+            return const Center(child: CircularProgressIndicator());
           }
 
           if (provider.error != null) {
-            return Center(
-              child: Text('Error: ${provider.error}'),
-            );
+            return Center(child: Text('Error: ${provider.error}'));
           }
 
           final transactions = provider.recurringTransactions;
@@ -94,13 +84,11 @@ class RecurringTransactionListScreen extends StatelessWidget {
                         ),
                         title: Text(
                           transaction.title,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
+                          style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
                         subtitle: Text(
                           '${transaction.category} • '
-                              '${transaction.frequency}',
+                          '${transaction.frequency}',
                         ),
                         trailing: Text(
                           '₹${transaction.amount.toStringAsFixed(2)}',
@@ -120,10 +108,10 @@ class RecurringTransactionListScreen extends StatelessWidget {
                           Expanded(
                             child: Text(
                               'Next due: '
-                                  '${formatDate(transaction.nextDueDate)}',
+                              '${formatDate(transaction.nextDueDate)}',
                             ),
                           ),
-                          const Text('Active'),
+                          Text(transaction.isActive ? 'Active' : 'Inactive'),
                           Switch(
                             value: transaction.isActive,
                             onChanged: (value) {
@@ -135,25 +123,38 @@ class RecurringTransactionListScreen extends StatelessWidget {
                           ),
                         ],
                       ),
-
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: TextButton.icon(
-                          onPressed: () {
-                            confirmDelete(
-                              context,
-                              transaction.id,
-                            );
-                          },
-                          icon: const Icon(
-                            Icons.delete_outline,
-                            color: Colors.red,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          TextButton.icon(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      AddRecurringTransactionScreen(
+                                        transaction: transaction,
+                                      ),
+                                ),
+                              );
+                            },
+                            icon: const Icon(Icons.edit),
+                            label: const Text('Edit'),
                           ),
-                          label: const Text(
-                            'Delete',
-                            style: TextStyle(color: Colors.red),
+                          TextButton.icon(
+                            onPressed: () {
+                              confirmDelete(context, transaction.id);
+                            },
+                            icon: const Icon(
+                              Icons.delete_outline,
+                              color: Colors.red,
+                            ),
+                            label: const Text(
+                              'Delete',
+                              style: TextStyle(color: Colors.red),
+                            ),
                           ),
-                        ),
+                        ],
                       ),
                     ],
                   ),
@@ -168,8 +169,7 @@ class RecurringTransactionListScreen extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) =>
-              const AddRecurringTransactionScreen(),
+              builder: (context) => const AddRecurringTransactionScreen(),
             ),
           );
         },

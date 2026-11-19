@@ -1,4 +1,3 @@
-
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -11,8 +10,7 @@ class AddTransactionScreen extends StatefulWidget {
   const AddTransactionScreen({super.key});
 
   @override
-  State<AddTransactionScreen> createState() =>
-      _AddTransactionScreenState();
+  State<AddTransactionScreen> createState() => _AddTransactionScreenState();
 }
 
 class _AddTransactionScreenState extends State<AddTransactionScreen> {
@@ -83,25 +81,21 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
     );
 
     try {
-      await context
-          .read<TransactionProvider>()
-          .addTransaction(transaction);
+      await context.read<TransactionProvider>().addTransaction(transaction);
 
       if (!mounted) return;
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Transaction added successfully'),
-        ),
+        const SnackBar(content: Text('Transaction added successfully')),
       );
 
       Navigator.pop(context);
     } catch (e) {
       if (!mounted) return;
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to add transaction: $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Failed to add transaction: $e')));
     }
   }
 
@@ -123,9 +117,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
       _category = categoryOptions.first;
     }
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Add Transaction'),
-      ),
+      appBar: AppBar(title: const Text('Add Transaction')),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Form(

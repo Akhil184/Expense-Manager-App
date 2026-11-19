@@ -12,21 +12,23 @@ class TransactionListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Transactions'),actions: [
-        IconButton(
-          icon: const Icon(Icons.repeat),
-          tooltip: 'Add Recurring Transaction',
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) =>
-                const  RecurringTransactionListScreen(),
-              ),
-            );
-          },
-        ),
-      ],),
+      appBar: AppBar(
+        title: const Text('Transactions'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.repeat),
+            tooltip: 'Add Recurring Transaction',
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const RecurringTransactionListScreen(),
+                ),
+              );
+            },
+          ),
+        ],
+      ),
       body: Consumer<TransactionProvider>(
         builder: (context, provider, child) {
           if (provider.isLoading) {

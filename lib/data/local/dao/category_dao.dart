@@ -1,4 +1,3 @@
-
 import 'package:drift/drift.dart';
 
 import '../database/app_database.dart';
@@ -15,11 +14,9 @@ class CategoryDao extends DatabaseAccessor<AppDatabase>
   }
 
   Future<List<Category>> getAllCategories() {
-    return (select(categories)
-      ..orderBy([
-            (table) => OrderingTerm.asc(table.name),
-      ]))
-        .get();
+    return (select(
+      categories,
+    )..orderBy([(table) => OrderingTerm.asc(table.name)])).get();
   }
 
   Stream<List<Category>> watchCategories() {
@@ -27,8 +24,6 @@ class CategoryDao extends DatabaseAccessor<AppDatabase>
   }
 
   Future<int> deleteCategory(String id) {
-    return (delete(categories)
-      ..where((table) => table.id.equals(id)))
-        .go();
+    return (delete(categories)..where((table) => table.id.equals(id))).go();
   }
 }

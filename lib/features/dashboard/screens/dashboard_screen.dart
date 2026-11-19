@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -27,9 +26,7 @@ class DashboardScreen extends StatelessWidget {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(
-              builder: (_) => const AddTransactionScreen(),
-            ),
+            MaterialPageRoute(builder: (_) => const AddTransactionScreen()),
           );
         },
         child: const Icon(Icons.add),
@@ -37,15 +34,11 @@ class DashboardScreen extends StatelessWidget {
       body: Consumer<TransactionProvider>(
         builder: (context, provider, child) {
           if (provider.isLoading) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
+            return const Center(child: CircularProgressIndicator());
           }
 
           if (provider.error != null) {
-            return Center(
-              child: Text('Error: ${provider.error}'),
-            );
+            return Center(child: Text('Error: ${provider.error}'));
           }
 
           final transactions = provider.transactions;
@@ -99,8 +92,7 @@ class DashboardScreen extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (_) =>
-                            const TransactionListScreen(),
+                            builder: (_) => const TransactionListScreen(),
                           ),
                         );
                       },
@@ -114,9 +106,7 @@ class DashboardScreen extends StatelessWidget {
                 if (recentTransactions.isEmpty)
                   const Padding(
                     padding: EdgeInsets.all(24),
-                    child: Center(
-                      child: Text('No transactions yet.'),
-                    ),
+                    child: Center(child: Text('No transactions yet.')),
                   )
                 else
                   ...recentTransactions.map((transaction) {
@@ -129,20 +119,16 @@ class DashboardScreen extends StatelessWidget {
                             isIncome
                                 ? Icons.arrow_downward
                                 : Icons.arrow_upward,
-                            color: isIncome
-                                ? Colors.green
-                                : Colors.red,
+                            color: isIncome ? Colors.green : Colors.red,
                           ),
                         ),
                         title: Text(transaction.title),
                         subtitle: Text(transaction.category),
                         trailing: Text(
                           '${isIncome ? '+' : '-'}₹'
-                              '${transaction.amount.toStringAsFixed(2)}',
+                          '${transaction.amount.toStringAsFixed(2)}',
                           style: TextStyle(
-                            color: isIncome
-                                ? Colors.green
-                                : Colors.red,
+                            color: isIncome ? Colors.green : Colors.red,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -168,10 +154,7 @@ class DashboardScreen extends StatelessWidget {
           children: [
             const Text(
               'Total Balance',
-              style: TextStyle(
-                color: Colors.white70,
-                fontSize: 16,
-              ),
+              style: TextStyle(color: Colors.white70, fontSize: 16),
             ),
             const SizedBox(height: 12),
             Text(

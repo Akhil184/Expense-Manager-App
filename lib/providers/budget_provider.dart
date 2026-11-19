@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:drift/drift.dart';
 
@@ -10,10 +9,7 @@ class BudgetProvider extends ChangeNotifier {
   final BudgetRepository _budgetRepository;
   final TransactionRepository _transactionRepository;
 
-  BudgetProvider(
-      this._budgetRepository,
-      this._transactionRepository,
-      ) {
+  BudgetProvider(this._budgetRepository, this._transactionRepository) {
     loadBudgets();
   }
 
@@ -35,8 +31,7 @@ class BudgetProvider extends ChangeNotifier {
 
     try {
       _budgets = await _budgetRepository.getAllBudgets();
-      _transactions =
-      await _transactionRepository.getAllTransactions();
+      _transactions = await _transactionRepository.getAllTransactions();
     } catch (e) {
       _error = e.toString();
     } finally {
@@ -100,15 +95,14 @@ class BudgetProvider extends ChangeNotifier {
     required int year,
   }) {
     return _transactions
-        .where((transaction) =>
-    transaction.type == 'expense' &&
-        transaction.category == category &&
-        transaction.transactionDate.month == month &&
-        transaction.transactionDate.year == year)
-        .fold(
-      0.0,
-          (total, transaction) => total + transaction.amount,
-    );
+        .where(
+          (transaction) =>
+              transaction.type == 'expense' &&
+              transaction.category == category &&
+              transaction.transactionDate.month == month &&
+              transaction.transactionDate.year == year,
+        )
+        .fold(0.0, (total, transaction) => total + transaction.amount);
   }
 
   // Get remaining budget

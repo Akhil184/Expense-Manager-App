@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -10,21 +9,15 @@ class AnalyticsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Analytics'),
-      ),
+      appBar: AppBar(title: const Text('Analytics')),
       body: Consumer<TransactionProvider>(
         builder: (context, provider, child) {
           if (provider.isLoading) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
+            return const Center(child: CircularProgressIndicator());
           }
 
           if (provider.error != null) {
-            return Center(
-              child: Text('Error: ${provider.error}'),
-            );
+            return Center(child: Text('Error: ${provider.error}'));
           }
 
           final income = provider.totalIncome;
@@ -32,8 +25,7 @@ class AnalyticsScreen extends StatelessWidget {
           final savings = income - expense;
 
           final expenses = provider.transactions
-              .where((transaction) =>
-          transaction.type == 'expense')
+              .where((transaction) => transaction.type == 'expense')
               .toList();
 
           final Map<String, double> categoryTotals = {};
@@ -41,7 +33,7 @@ class AnalyticsScreen extends StatelessWidget {
           for (final transaction in expenses) {
             categoryTotals[transaction.category] =
                 (categoryTotals[transaction.category] ?? 0) +
-                    transaction.amount;
+                transaction.amount;
           }
 
           final sortedCategories = categoryTotals.entries.toList()
@@ -58,10 +50,7 @@ class AnalyticsScreen extends StatelessWidget {
             children: [
               const Text(
                 'Financial Overview',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
 
               const SizedBox(height: 16),
@@ -91,10 +80,7 @@ class AnalyticsScreen extends StatelessWidget {
 
               const Text(
                 'Income vs Expenses',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
 
               const SizedBox(height: 16),
@@ -119,10 +105,7 @@ class AnalyticsScreen extends StatelessWidget {
 
               const Text(
                 'Expenses by Category',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
 
               const SizedBox(height: 12),
@@ -187,10 +170,7 @@ class AnalyticsScreen extends StatelessWidget {
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(title),
-            Text('₹${amount.toStringAsFixed(2)}'),
-          ],
+          children: [Text(title), Text('₹${amount.toStringAsFixed(2)}')],
         ),
         const SizedBox(height: 8),
         LinearProgressIndicator(
@@ -209,8 +189,7 @@ class AnalyticsScreen extends StatelessWidget {
     required double amount,
     required double highestExpense,
   }) {
-    final progress =
-    highestExpense > 0 ? amount / highestExpense : 0.0;
+    final progress = highestExpense > 0 ? amount / highestExpense : 0.0;
 
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
@@ -224,15 +203,11 @@ class AnalyticsScreen extends StatelessWidget {
               children: [
                 Text(
                   category,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w600,
-                  ),
+                  style: const TextStyle(fontWeight: FontWeight.w600),
                 ),
                 Text(
                   '₹${amount.toStringAsFixed(2)}',
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
               ],
             ),

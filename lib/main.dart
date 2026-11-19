@@ -1,4 +1,3 @@
-
 import 'package:expense_manager_app/providers/category_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -28,40 +27,29 @@ Future<void> main() async {
   final database = AppDatabase();
 
   // Initialize transaction repository
-  final transactionRepository = TransactionRepository(
-    database.transactionDao,
-  );
+  final transactionRepository = TransactionRepository(database.transactionDao);
 
   // Initialize budget repository
-  final budgetRepository = BudgetRepository(
-    database.budgetDao,
-  );
+  final budgetRepository = BudgetRepository(database.budgetDao);
 
-  final categoryRepository = CategoryRepository(
-    database.categoryDao,
-  );
+  final categoryRepository = CategoryRepository(database.categoryDao);
 
-  final recurringTransactionRepository =
-  RecurringTransactionRepository(database.recurringTransactionDao);
+  final recurringTransactionRepository = RecurringTransactionRepository(
+    database.recurringTransactionDao,
+  );
 
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider.value(
-          value: themeProvider,
+        ChangeNotifierProvider.value(value: themeProvider),
+
+        ChangeNotifierProvider(
+          create: (_) => TransactionProvider(transactionRepository),
         ),
 
         ChangeNotifierProvider(
-          create: (_) => TransactionProvider(
-            transactionRepository,
-          ),
-        ),
-
-        ChangeNotifierProvider(
-          create: (_) => BudgetProvider(
-            budgetRepository,
-            transactionRepository,
-          ),
+          create: (_) =>
+              BudgetProvider(budgetRepository, transactionRepository),
         ),
         ChangeNotifierProvider(
           create: (_) => RecurringTransactionProvider(
@@ -78,8 +66,49 @@ Future<void> main() async {
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addObserver(this);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      generateRecurringTransactions();
+    });
+  }
+
+  Future<void> generateRecurringTransactions() async {
+    if (!mounted) return;
+
+    try {
+      await context
+          .read<RecurringTransactionProvider>()
+          .generateDueTransactions();
+    } catch (e) {
+      debugPrint('Recurring transaction error: $e');
+    }
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      generateRecurringTransactions();
+    }
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -1,4 +1,3 @@
-
 import '../local/database/app_database.dart';
 import '../local/dao/budget_dao.dart';
 
@@ -23,16 +22,8 @@ class BudgetRepository {
   }
 
   // Get budget by category, month and year
-  Future<Budget?> getBudgetByCategory(
-      String category,
-      int month,
-      int year,
-      ) {
-    return _budgetDao.getBudgetByCategory(
-      category,
-      month,
-      year,
-    );
+  Future<Budget?> getBudgetByCategory(String category, int month, int year) {
+    return _budgetDao.getBudgetByCategory(category, month, year);
   }
 
   // Update budget

@@ -9,27 +9,19 @@ class BudgetScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Budgets'),
-      ),
+      appBar: AppBar(title: const Text('Budgets')),
       body: Consumer<BudgetProvider>(
         builder: (context, provider, child) {
           if (provider.isLoading) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
+            return const Center(child: CircularProgressIndicator());
           }
 
           if (provider.error != null) {
-            return Center(
-              child: Text('Error: ${provider.error}'),
-            );
+            return Center(child: Text('Error: ${provider.error}'));
           }
 
           if (provider.budgets.isEmpty) {
-            return const Center(
-              child: Text('No budgets added yet.'),
-            );
+            return const Center(child: Text('No budgets added yet.'));
           }
 
           return RefreshIndicator(
@@ -60,9 +52,7 @@ class BudgetScreen extends StatelessWidget {
                             Expanded(
                               child: Text(
                                 budget.category,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleMedium,
+                                style: Theme.of(context).textTheme.titleMedium,
                               ),
                             ),
                             Row(
@@ -95,32 +85,22 @@ class BudgetScreen extends StatelessWidget {
                           ],
                         ),
                         const SizedBox(height: 8),
-                        Text(
-                          'Budget: ₹${budget.amount.toStringAsFixed(2)}',
-                        ),
-                        Text(
-                          'Spent: ₹${spent.toStringAsFixed(2)}',
-                        ),
+                        Text('Budget: ₹${budget.amount.toStringAsFixed(2)}'),
+                        Text('Spent: ₹${spent.toStringAsFixed(2)}'),
                         Text(
                           'Remaining: ₹${remaining.toStringAsFixed(2)}',
                           style: TextStyle(
-                            color: remaining < 0
-                                ? Colors.red
-                                : Colors.green,
+                            color: remaining < 0 ? Colors.red : Colors.green,
                           ),
                         ),
                         const SizedBox(height: 12),
                         LinearProgressIndicator(
                           value: percentage,
                           minHeight: 8,
-                          color: percentage >= 1
-                              ? Colors.red
-                              : Colors.green,
+                          color: percentage >= 1 ? Colors.red : Colors.green,
                         ),
                         const SizedBox(height: 6),
-                        Text(
-                          '${(percentage * 100).toStringAsFixed(0)}% used',
-                        ),
+                        Text('${(percentage * 100).toStringAsFixed(0)}% used'),
                         Text(
                           '${budget.month}/${budget.year}',
                           style: Theme.of(context).textTheme.bodySmall,
@@ -138,9 +118,7 @@ class BudgetScreen extends StatelessWidget {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(
-              builder: (_) => const AddBudgetScreen(),
-            ),
+            MaterialPageRoute(builder: (_) => const AddBudgetScreen()),
           );
         },
         child: const Icon(Icons.add),
@@ -148,7 +126,6 @@ class BudgetScreen extends StatelessWidget {
     );
   }
 }
-
 
 class AddBudgetScreen extends StatefulWidget {
   final String? budgetId;
@@ -175,7 +152,6 @@ class _AddBudgetScreenState extends State<AddBudgetScreen> {
   final _amountController = TextEditingController();
 
   String _category = 'Food';
-
 
   final List<String> _categories = [
     'Food',
@@ -252,18 +228,16 @@ class _AddBudgetScreenState extends State<AddBudgetScreen> {
     } catch (e) {
       if (!mounted) return;
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to save budget: $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Failed to save budget: $e')));
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(_isEditing ? 'Edit Budget' : 'Add Budget'),
-      ),
+      appBar: AppBar(title: Text(_isEditing ? 'Edit Budget' : 'Add Budget')),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Form(
@@ -373,9 +347,7 @@ class _AddBudgetScreenState extends State<AddBudgetScreen> {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: _saveBudget,
-                  child: Text(
-                    _isEditing ? 'Update Budget' : 'Save Budget',
-                  ),
+                  child: Text(_isEditing ? 'Update Budget' : 'Save Budget'),
                 ),
               ),
             ],

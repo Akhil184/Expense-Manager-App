@@ -18,7 +18,7 @@ class ThemeProvider extends ChangeNotifier {
     final savedTheme = preferences.getString(_themeKey);
 
     final themeMode = ThemeMode.values.firstWhere(
-          (mode) => mode.name == savedTheme,
+      (mode) => mode.name == savedTheme,
       orElse: () => ThemeMode.system,
     );
 

@@ -10,10 +10,7 @@ class RecurringTransactionProvider extends ChangeNotifier {
 
   final TransactionRepository _transactionRepository;
 
-  RecurringTransactionProvider(
-      this._repository,
-      this._transactionRepository,
-      ) {
+  RecurringTransactionProvider(this._repository, this._transactionRepository) {
     loadRecurringTransactions();
   }
 
@@ -112,10 +109,8 @@ class RecurringTransactionProvider extends ChangeNotifier {
     await _repository.deleteRecurringTransaction(id);
     await loadRecurringTransactions();
   }
-  DateTime _calculateNextDueDate(
-      DateTime date,
-      String frequency,
-      ) {
+
+  DateTime _calculateNextDueDate(DateTime date, String frequency) {
     switch (frequency.toLowerCase()) {
       case 'daily':
         return date.add(const Duration(days: 1));
@@ -125,11 +120,7 @@ class RecurringTransactionProvider extends ChangeNotifier {
 
       case 'monthly':
         final nextMonth = DateTime(date.year, date.month + 1, 1);
-        final lastDay = DateTime(
-          nextMonth.year,
-          nextMonth.month + 1,
-          0,
-        ).day;
+        final lastDay = DateTime(nextMonth.year, nextMonth.month + 1, 0).day;
 
         return DateTime(
           nextMonth.year,
@@ -180,10 +171,7 @@ class RecurringTransactionProvider extends ChangeNotifier {
 
         await _transactionRepository.addRecurringTransaction(transaction);
 
-        final nextDate = _calculateNextDueDate(
-          dueDate,
-          schedule.frequency,
-        );
+        final nextDate = _calculateNextDueDate(dueDate, schedule.frequency);
 
         await _repository.updateRecurringSchedule(
           id: schedule.id,

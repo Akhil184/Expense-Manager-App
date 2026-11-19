@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -35,27 +34,23 @@ class _AddCategoryScreenState extends State<AddCategoryScreen> {
       if (!mounted) return;
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Category added successfully'),
-        ),
+        const SnackBar(content: Text('Category added successfully')),
       );
 
       Navigator.pop(context);
     } catch (e) {
       if (!mounted) return;
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to add category: $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Failed to add category: $e')));
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Add Category'),
-      ),
+      appBar: AppBar(title: const Text('Add Category')),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Form(
@@ -92,18 +87,10 @@ class _AddCategoryScreenState extends State<AddCategoryScreen> {
               const SizedBox(height: 8),
               DropdownButtonFormField<String>(
                 value: _type,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                ),
+                decoration: const InputDecoration(border: OutlineInputBorder()),
                 items: const [
-                  DropdownMenuItem(
-                    value: 'expense',
-                    child: Text('Expense'),
-                  ),
-                  DropdownMenuItem(
-                    value: 'income',
-                    child: Text('Income'),
-                  ),
+                  DropdownMenuItem(value: 'expense', child: Text('Expense')),
+                  DropdownMenuItem(value: 'income', child: Text('Income')),
                 ],
                 onChanged: (value) {
                   if (value != null) {

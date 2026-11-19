@@ -1,4 +1,3 @@
-
 import 'package:drift/drift.dart';
 
 import '../local/database/app_database.dart';
@@ -29,9 +28,7 @@ class TransactionRepository {
     return _transactionDao.getTransactionById(id);
   }
 
-  Future<int> addRecurringTransaction(
-      TransactionsCompanion transaction,
-      ) {
+  Future<int> addRecurringTransaction(TransactionsCompanion transaction) {
     return _transactionDao.insertRecurringTransaction(transaction);
   }
 
