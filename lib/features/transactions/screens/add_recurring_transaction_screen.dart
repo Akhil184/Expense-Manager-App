@@ -318,16 +318,68 @@ class _AddRecurringTransactionScreenState
               const SizedBox(height: 24),
 
               SizedBox(
-                height: 50,
-                child: ElevatedButton(
-                  onPressed: _isSaving ? null : _saveRecurringTransaction,
-                  child: _isSaving
-                      ? const CircularProgressIndicator()
-                      : Text(
-                          _isEditing
-                              ? 'Update Recurring Transaction'
-                              : 'Save Recurring Transaction',
+                width: double.infinity,
+                height: 55,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: _isSaving
+                          ? [Colors.grey, Colors.blueGrey]
+                          : const [
+                        Color(0xFF6C63FF),
+                        Color(0xFF4834D4),
+                      ],
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
+                    ),
+                    borderRadius: BorderRadius.circular(15),
+                    boxShadow: [
+                      if (!_isSaving)
+                        BoxShadow(
+                          color: const Color(0xFF6C63FF).withOpacity(0.3),
+                          blurRadius: 10,
+                          offset: const Offset(0, 5),
                         ),
+                    ],
+                  ),
+                  child: ElevatedButton.icon(
+                    onPressed: _isSaving ? null : _saveRecurringTransaction,
+                    icon: _isSaving
+                        ? const SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        color: Colors.white,
+                      ),
+                    )
+                        : Icon(
+                      _isEditing
+                          ? Icons.edit_calendar_rounded
+                          : Icons.event_repeat_rounded,
+                      color: Colors.white,
+                    ),
+                    label: Text(
+                      _isSaving
+                          ? 'Please wait...'
+                          : _isEditing
+                          ? 'Update Recurring Transaction'
+                          : 'Save Recurring Transaction',
+                      style: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.transparent,
+                      disabledBackgroundColor: Colors.transparent,
+                      shadowColor: Colors.transparent,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                    ),
+                  ),
                 ),
               ),
             ],

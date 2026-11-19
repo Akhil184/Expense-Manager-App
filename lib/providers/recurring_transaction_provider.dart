@@ -18,6 +18,7 @@ class RecurringTransactionProvider extends ChangeNotifier {
 
   bool _isLoading = false;
   String? _error;
+  bool _isGenerating = false;
 
   List<RecurringTransaction> get recurringTransactions =>
       _recurringTransactions;
@@ -144,45 +145,53 @@ class RecurringTransactionProvider extends ChangeNotifier {
   }
 
   Future<void> generateDueTransactions() async {
-    final now = DateTime.now();
+    if (_isGenerating) return;
 
-    final schedules = await _repository.getAllRecurringTransactions();
+    _isGenerating = true;
 
-    for (final schedule in schedules) {
-      if (!schedule.isActive) continue;
+    try {
+      final now = DateTime.now();
 
-      var dueDate = schedule.nextDueDate;
+      final schedules = await _repository.getAllRecurringTransactions();
 
-      while (!dueDate.isAfter(now)) {
-        final transactionId =
-            'recurring_${schedule.id}_${dueDate.microsecondsSinceEpoch}';
+      for (final schedule in schedules) {
+        if (!schedule.isActive) continue;
 
-        final transaction = TransactionsCompanion.insert(
-          id: transactionId,
-          title: schedule.title,
-          amount: schedule.amount,
-          type: schedule.type,
-          category: schedule.category,
-          note: Value(schedule.note),
-          transactionDate: dueDate,
-          createdAt: now,
-          updatedAt: now,
-        );
+        var dueDate = schedule.nextDueDate;
 
-        await _transactionRepository.addRecurringTransaction(transaction);
+        while (!dueDate.isAfter(now)) {
+          final transactionId =
+              'recurring_${schedule.id}_${dueDate.microsecondsSinceEpoch}';
 
-        final nextDate = _calculateNextDueDate(dueDate, schedule.frequency);
+          final transaction = TransactionsCompanion.insert(
+            id: transactionId,
+            title: schedule.title,
+            amount: schedule.amount,
+            type: schedule.type,
+            category: schedule.category,
+            note: Value(schedule.note),
+            transactionDate: dueDate,
+            createdAt: now,
+            updatedAt: now,
+          );
 
-        await _repository.updateRecurringSchedule(
-          id: schedule.id,
-          nextDueDate: nextDate,
-          lastGeneratedDate: dueDate,
-        );
+          await _transactionRepository.addRecurringTransaction(transaction);
 
-        dueDate = nextDate;
+          final nextDate = _calculateNextDueDate(dueDate, schedule.frequency);
+
+          await _repository.updateRecurringSchedule(
+            id: schedule.id,
+            nextDueDate: nextDate,
+            lastGeneratedDate: dueDate,
+          );
+
+          dueDate = nextDate;
+        }
       }
-    }
 
-    await loadRecurringTransactions();
+      await loadRecurringTransactions();
+    } finally {
+      _isGenerating = false;
+    }
   }
 }

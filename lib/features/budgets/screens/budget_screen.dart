@@ -322,6 +322,7 @@ class _AddBudgetScreenState extends State<AddBudgetScreen> {
                   }
                 },
               ),
+              SizedBox(height:15,),
               TextFormField(
                 controller: _amountController,
                 keyboardType: const TextInputType.numberWithOptions(
@@ -345,9 +346,48 @@ class _AddBudgetScreenState extends State<AddBudgetScreen> {
               const SizedBox(height: 24),
               SizedBox(
                 width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: _saveBudget,
-                  child: Text(_isEditing ? 'Update Budget' : 'Save Budget'),
+                height: 55,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    gradient: const LinearGradient(
+                      colors: [
+                        Color(0xFF00B894),
+                        Color(0xFF009B77),
+                      ],
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
+                    ),
+                    borderRadius: BorderRadius.circular(15),
+                    boxShadow: [
+                      BoxShadow(
+                        color: const Color(0xFF00B894).withOpacity(0.3),
+                        blurRadius: 10,
+                        offset: const Offset(0, 5),
+                      ),
+                    ],
+                  ),
+                  child: ElevatedButton.icon(
+                    onPressed: _saveBudget,
+                    icon: Icon(
+                      _isEditing ? Icons.edit_rounded : Icons.add_circle_outline,
+                      color: Colors.white,
+                    ),
+                    label: Text(
+                      _isEditing ? 'Update Budget' : 'Save Budget',
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.transparent,
+                      shadowColor: Colors.transparent,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                    ),
+                  ),
                 ),
               ),
             ],

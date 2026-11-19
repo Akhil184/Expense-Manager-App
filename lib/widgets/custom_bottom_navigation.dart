@@ -34,6 +34,10 @@ class CustomBottomNavigation extends StatelessWidget {
           label: 'Budgets',
         ),
         BottomNavigationBarItem(
+          icon: Icon(Icons.savings_outlined),
+          label: 'Goals',
+        ),
+        BottomNavigationBarItem(
           icon: Icon(Icons.settings_outlined),
           label: 'Settings',
         ),

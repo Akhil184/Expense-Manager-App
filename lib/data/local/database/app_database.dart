@@ -5,7 +5,7 @@ import '../dao/budget_dao.dart';
 import '../dao/transaction_dao.dart';
 import '../dao/recurring_transaction_dao.dart';
 import 'database_helper.dart';
-
+import '../dao/savings_goal_dao.dart';
 part 'app_database.g.dart';
 
 // Transactions Table
@@ -75,16 +75,47 @@ class RecurringTransactions extends Table {
   Set<Column> get primaryKey => {id};
 }
 
+class SavingsGoals extends Table {
+  TextColumn get id => text()();
+
+  TextColumn get title => text()();
+
+  RealColumn get targetAmount => real()();
+
+  RealColumn get currentAmount => real().withDefault(const Constant(0))();
+
+  DateTimeColumn get targetDate => dateTime().nullable()();
+
+  DateTimeColumn get createdAt => dateTime()();
+
+  DateTimeColumn get updatedAt => dateTime()();
+
+  @override
+  Set<Column> get primaryKey => {id};
+}
+
 // Database
 @DriftDatabase(
-  tables: [Transactions, Budgets, Categories, RecurringTransactions],
-  daos: [TransactionDao, BudgetDao, CategoryDao, RecurringTransactionDao],
+  tables: [
+    Transactions,
+    Budgets,
+    Categories,
+    RecurringTransactions,
+    SavingsGoals,
+  ],
+  daos: [
+    TransactionDao,
+    BudgetDao,
+    CategoryDao,
+    RecurringTransactionDao,
+    SavingsGoalDao,
+  ],
 )
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(DatabaseHelper.openConnection());
 
   @override
-  int get schemaVersion => 4;
+  int get schemaVersion => 5;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -102,6 +133,9 @@ class AppDatabase extends _$AppDatabase {
 
       if (from < 4) {
         await m.createTable(recurringTransactions);
+      }
+      if (from < 5) {
+        await m.createTable(savingsGoals);
       }
     },
   );

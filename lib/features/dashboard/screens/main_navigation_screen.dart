@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import '../../goals/screens/savings_goals_screen.dart';
 import '../../dashboard/screens/dashboard_screen.dart';
 import '../../transactions/screens/transaction_list_screen.dart';
 import '../../analytics/screens/analytics_screen.dart';
@@ -22,6 +22,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
     TransactionListScreen(),
     AnalyticsScreen(),
     BudgetScreen(),
+    SavingsGoalsScreen(),
     SettingsScreen(),
   ];
 

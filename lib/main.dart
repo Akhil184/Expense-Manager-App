@@ -1,7 +1,8 @@
 import 'package:expense_manager_app/providers/category_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
+import 'data/repositories/savings_goal_repository.dart';
+import 'providers/savings_goal_provider.dart';
 import 'core/theme/app_theme.dart';
 import 'core/theme/theme_provider.dart';
 
@@ -38,6 +39,8 @@ Future<void> main() async {
     database.recurringTransactionDao,
   );
 
+  final savingsGoalRepository = SavingsGoalRepository(database.savingsGoalDao);
+
   runApp(
     MultiProvider(
       providers: [
@@ -45,6 +48,9 @@ Future<void> main() async {
 
         ChangeNotifierProvider(
           create: (_) => TransactionProvider(transactionRepository),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => SavingsGoalProvider(savingsGoalRepository),
         ),
 
         ChangeNotifierProvider(
