@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
+import '../../../providers/auth_provider.dart';
 import '../../../providers/transaction_provider.dart';
 import '../../transactions/screens/add_transaction_screen.dart';
 import '../../transactions/screens/transaction_list_screen.dart';
@@ -15,10 +15,12 @@ class DashboardScreen extends StatelessWidget {
         title: const Text('Expense Manager'),
         actions: [
           IconButton(
-            icon: const Icon(Icons.settings),
-            onPressed: () {
-              // Settings screen will be connected later.
-            },
+            icon: const Icon(
+              Icons.logout_rounded,
+              color: Colors.red,
+            ),
+            tooltip: 'Logout',
+            onPressed: () => _logout(context),
           ),
         ],
       ),
@@ -170,6 +172,88 @@ class DashboardScreen extends StatelessWidget {
       ),
     );
   }
+
+  Future<void> _logout(BuildContext context) async {
+    final confirm = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Logout',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                const Text(
+                  'Are you sure you want to logout from your account?',
+                ),
+                const SizedBox(height: 24),
+
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(dialogContext, false);
+                      },
+                      child: const Text('Cancel'),
+                    ),
+                    const SizedBox(width: 8),
+                    Container(
+                      width:130,
+                    child:ElevatedButton.icon(
+                      onPressed: () {
+                        Navigator.pop(dialogContext, true);
+                      },
+                      icon: const Icon(Icons.logout),
+                      label: const Text('Logout'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.red,
+                        foregroundColor: Colors.white,
+                      ),
+                    ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+
+    if (confirm != true || !context.mounted) return;
+
+    final authProvider = context.read<AuthProvider>();
+
+    final success = await authProvider.logout();
+
+    if (!context.mounted) return;
+
+    if (!success) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            authProvider.errorMessage ?? 'Logout failed',
+          ),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+
+
 
   Widget _buildSummaryCard({
     required String title,

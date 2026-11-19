@@ -5,12 +5,17 @@ import 'data/repositories/savings_goal_repository.dart';
 import 'providers/savings_goal_provider.dart';
 import 'core/theme/app_theme.dart';
 import 'core/theme/theme_provider.dart';
-
+import 'package:provider/provider.dart';
+import 'features/auth/screens/auth_gate.dart';
+import 'features/auth/services/auth_service.dart';
+import 'providers/auth_provider.dart';
 import 'data/local/database/app_database.dart';
 import 'data/repositories/category_repository.dart';
 import 'data/repositories/transaction_repository.dart';
 import 'data/repositories/budget_repository.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
+import 'core/constants/supabase_config.dart';
 import 'features/dashboard/screens/main_navigation_screen.dart';
 import 'providers/transaction_provider.dart';
 import 'providers/budget_provider.dart';
@@ -26,6 +31,11 @@ Future<void> main() async {
 
   // Initialize database
   final database = AppDatabase();
+
+  await Supabase.initialize(
+    url: SupabaseConfig.supabaseUrl,
+    anonKey: SupabaseConfig.supabaseAnonKey,
+  );
 
   // Initialize transaction repository
   final transactionRepository = TransactionRepository(database.transactionDao);
@@ -51,6 +61,9 @@ Future<void> main() async {
         ),
         ChangeNotifierProvider(
           create: (_) => SavingsGoalProvider(savingsGoalRepository),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => AuthProvider(AuthService()),
         ),
 
         ChangeNotifierProvider(
@@ -126,7 +139,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           theme: AppTheme.light,
           darkTheme: AppTheme.dark,
           themeMode: themeProvider.themeMode,
-          home: const MainNavigationScreen(),
+          home: const AuthGate(),
         );
       },
     );
